@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const BooksComponent = () => {
   //   const [books, setbooks] = useState([
@@ -26,15 +26,18 @@ export const BooksComponent = () => {
           </tr>
         </thead>
         <tbody>
-          <Books books={books} onRemove={onRemove}></Books>
+          <Books books={books}></Books>
         </tbody>
       </table>
     </div>
   );
 };
 
-const Books = React.memo(({ books, onRemove }) => {
-  console.log("rerender Element");
+const Books = React.memo(({ books }) => {
+  const dispatch = useDispatch();
+  const removeABook = (id) => {
+    dispatch({ type: "Delete_BOOK", id });
+  };
   return (
     <>
       {books.map((book) => (
@@ -42,7 +45,7 @@ const Books = React.memo(({ books, onRemove }) => {
           <td>{book.name}</td>
           <td>{book.author}</td>
           <td>
-            <button onClick={onRemove}>Remove</button>
+            <button onClick={() => removeABook(book.id)}>Remove</button>
           </td>
         </tr>
       ))}
